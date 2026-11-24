@@ -12,7 +12,13 @@ function getPool() {
   return (pool ??= new Pool({
     connectionString: process.env.DATABASE_URL,
     max: 1,
-    ssl: process.env.DATABASE_SSL === 'disable' ? false : { rejectUnauthorized: true },
+    ssl:
+      process.env.DATABASE_SSL === 'disable'
+        ? false
+        : {
+            rejectUnauthorized: true,
+            ca: process.env.SUPABASE_DB_CA_CERT?.replace(/\\n/g, '\n'),
+          },
     idleTimeoutMillis: 20000,
     connectionTimeoutMillis: 10000,
   }));
